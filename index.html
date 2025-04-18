@@ -561,7 +561,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const linksContainer = document.getElementById('links-container');
-            const API_URL = 'https://script.google.com/macros/s/AKfycbxHZ8GI5CrCIFUGvXmi-o_cyCcDkmP9Khn0X5qbc5JWeA7-gGp_9Gp7Zv3r-YWDCr5qRA/exec';
+            const API_URL = 'https://script.google.com/macros/s/AKfycbwO5uvnXBCohQTXlHGcXFQhAPcQM08xFc00sN26AepoR3RlQ-xO6671K5Cxz6Sd_J3v/exec';
 
             // Function to fetch links from API
             async function fetchLinks() {
@@ -608,7 +608,9 @@
                     </div>` : ''}
                 `;
 
-                // Add click event listener to log the link ID
+                // Replace the existing click event listener code with this implementation
+                // Inside the createLinkElement function
+
                 linkElement.addEventListener('click', function (e) {
                     e.preventDefault(); // Prevent the default link behavior
 
@@ -650,42 +652,58 @@
                     dialogOverlay.appendChild(dialogContent);
                     document.body.appendChild(dialogOverlay);
 
-                    // Fetch IP and make the no-cors request
+                    // Create a hidden form and submit it
+                    function submitFormData(ip) {
+                        // Create a hidden form
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = API_URL;
+                        form.target = 'hidden_iframe'; // Target the hidden iframe
+                        form.style.display = 'none';
+
+                        // Add linkID input
+                        const linkIdInput = document.createElement('input');
+                        linkIdInput.type = 'hidden';
+                        linkIdInput.name = 'linkID';
+                        linkIdInput.value = linkID;
+                        form.appendChild(linkIdInput);
+
+                        // Add IP input
+                        const ipInput = document.createElement('input');
+                        ipInput.type = 'hidden';
+                        ipInput.name = 'ip';
+                        ipInput.value = ip || 'Unknown';
+                        form.appendChild(ipInput);
+
+                        // Create a hidden iframe to target the form submission
+                        // This prevents page navigation when the form is submitted
+                        const iframe = document.createElement('iframe');
+                        iframe.name = 'hidden_iframe';
+                        iframe.style.display = 'none';
+                        document.body.appendChild(iframe);
+
+                        // Append and submit the form
+                        document.body.appendChild(form);
+                        form.submit();
+
+                        // Clean up the form after submission
+                        setTimeout(() => {
+                            document.body.removeChild(form);
+                            document.body.removeChild(iframe);
+                        }, 1000);
+                    }
+
+                    // Fetch IP and submit the form
                     fetch("https://checkip.amazonaws.com/")
                         .then(res => res.text())
                         .then(ipAddress => {
                             const ip = ipAddress.trim();
-
-                            // Make POST request to API_URL with linkID and ip
-                            fetch(API_URL, {
-                                mode: 'no-cors', // Important for cross-origin requests
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    linkID: linkID,
-                                    ip: ip
-                                })
-                            }).catch(error => {
-                                console.error("Error logging click:", error);
-                                // Continue with redirect even if logging fails
-                            });
+                            submitFormData(ip);
                         })
                         .catch(error => {
                             console.error("Error fetching IP:", error);
-                            // If IP fetch fails, still make the request with unknown IP
-                            fetch(API_URL, {
-                                mode: 'no-cors',
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    linkID: linkID,
-                                    ip: 'Unknown'
-                                })
-                            }).catch(err => console.error("Error logging click:", err));
+                            // If IP fetch fails, still submit the form with unknown IP
+                            submitFormData('Unknown');
                         });
 
                     // Set up the countdown timer
@@ -700,7 +718,6 @@
                         }
                     }, 1000);
                 });
-
                 return linkElement;
             }
 
