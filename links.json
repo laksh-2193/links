@@ -1,0 +1,42 @@
+{
+  "profile": {
+    "name": "Lakshay Kumar",
+    "initials": "LK",
+    "avatar": "",
+    "roles": ["data scientist", "builder", "open-source tinkerer", "curious human"],
+    "tagline": "Turning messy data into clear decisions. Everything I make, share and write — in one place.",
+    "website": "https://www.lakshaykumar.tech"
+  },
+  "links": [
+    {
+      "title": "Github",
+      "subtitle": "Code respositories & data science projects",
+      "additional_info": "20+ repositories",
+      "link": "https://github.com/laksh-2193"
+    },
+    {
+      "title": "LinkedIn",
+      "subtitle": "Professional Profile & connections",
+      "additional_info": "1000+ connections",
+      "link": "https://www.linkedin.com/in/lakshaykumar-tech/"
+    },
+    {
+      "title": "Email",
+      "subtitle": "Write to me",
+      "additional_info": "",
+      "link": "mailto:connect@lakshaykumar.com"
+    },
+    {
+      "title": "Instagram",
+      "subtitle": "Connecting beyond professionalism",
+      "additional_info": "",
+      "link": "https://www.instagram.com/lakshaykumar.tech/"
+    },
+    {
+        "title": "Twitter",
+        "subtitle": "Follow me for updates & thoughts",
+        "additional_info": "",
+        "link": "https://twitter.com/lakshaykumar219"
+    }
+  ]
+}
